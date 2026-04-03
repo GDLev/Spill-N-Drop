@@ -1,0 +1,34 @@
+# SpillNDrop Configuration
+# Available languages in the 'langs/' folder: en, pl
+language: en
+
+# Item Drop Chance Multipliers (Chance = Damage * Multiplier)
+# You can use a number (e.g. 6.0) or a percentage (e.g. 50%)
+multipliers:
+  FALL: 6.0
+  SONIC_BOOM: 10.0
+  GOAT_ATTACK: 20.0
+
+# Height at which items appear above the player (Leave it alone)
+drop-height-offset: 0.5
+
+# How long items cannot be picked up after being dropped (in ticks, 20 ticks = 1 second)
+pickup-delay: 20
+
+# Force with which items are scattered (0.1 to 1.0 recommended)
+scatter-force: 0.2
+
+# Feature toggles
+features:
+  # Drops random items from the player's entire inventory on damage.
+  # NOTE: It is not recommended to enable both 'drop-items' and 'drop-held-item' at the same time,
+  drop-items: true
+
+  # Drops only the item currently held in the player's main hand on damage.
+  # NOTE: It is not recommended to enable both 'drop-items' and 'drop-held-item' at the same time,
+  drop-held-item: false
+
+  # If true, water buckets will spill water. If false, they will be dropped as items (if a drop mode is enabled)
+  spill-water: true
+  # If true, potions will be thrown and smashed. If false, they will be dropped as items (if a drop mode is enabled)
+  smash-potions: true
