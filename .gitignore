@@ -1,3 +1,11 @@
 /build/
 /.idea/
 /.gradle/
+
+# Local test servers
+/run/
+/run-*/
+
+# OS files and local source archives
+.DS_Store
+/SpillNDrop-*-SourceCode.zip

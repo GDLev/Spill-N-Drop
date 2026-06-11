@@ -2,6 +2,13 @@
 # Available languages in the 'langs/' folder: en, pl
 language: en
 
+# Worlds in which SpillNDrop is enabled
+# Use '*' to enable SpillNDrop in all worlds
+enabled-worlds:
+  - world
+  - world_nether
+  - world_the_end
+
 # Item Drop Chance Multipliers (Chance = Damage * Multiplier)
 # You can use a number (e.g. 6.0) or a percentage (e.g. 50%)
 multipliers:

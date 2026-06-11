@@ -23,7 +23,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -76,6 +75,7 @@ public final class SpillNDrop extends JavaPlugin implements Listener, CommandExe
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player victim)) return;
+        if (!isEnabledWorld(victim.getWorld().getName())) return;
 
         String configKey = null;
 
@@ -126,6 +126,18 @@ public final class SpillNDrop extends JavaPlugin implements Listener, CommandExe
         }
     }
 
+    private boolean isEnabledWorld(String worldName) {
+        if (!getConfig().contains("enabled-worlds")) {
+            return worldName.equalsIgnoreCase("world")
+                    || worldName.equalsIgnoreCase("world_nether")
+                    || worldName.equalsIgnoreCase("world_the_end");
+        }
+
+        return getConfig().getStringList("enabled-worlds").stream()
+                .anyMatch(configuredWorld -> configuredWorld.equals("*")
+                        || configuredWorld.equalsIgnoreCase(worldName));
+    }
+
     private double calculateChance(String key, double damage) {
         String value = getConfig().getString("multipliers." + key);
         if (value == null) return 0;
@@ -160,9 +172,20 @@ public final class SpillNDrop extends JavaPlugin implements Listener, CommandExe
             loc.getBlock().setType(Material.WATER);
             Objects.requireNonNull(loc.getWorld()).playSound(loc, Sound.ITEM_BUCKET_EMPTY, 1.0f, 1.0f);
         } else if (isPotion && getConfig().getBoolean("features.smash-potions", true)) {
-            ThrownPotion thrown = (ThrownPotion) Objects.requireNonNull(loc.getWorld()).spawnEntity(loc, EntityType.POTION);
             ItemStack singlePotion = item.clone();
             singlePotion.setAmount(1);
+            if (singlePotion.getType() == Material.POTION) {
+                singlePotion.setType(Material.SPLASH_POTION);
+            }
+            EntityType potionEntityType = EntityType.SPLASH_POTION;
+            if (singlePotion.getType() == Material.LINGERING_POTION) {
+                try {
+                    potionEntityType = EntityType.valueOf("LINGERING_POTION");
+                } catch (IllegalArgumentException ignored) {
+                    // Older server versions use SPLASH_POTION for both thrown potion variants.
+                }
+            }
+            ThrownPotion thrown = (ThrownPotion) Objects.requireNonNull(loc.getWorld()).spawnEntity(loc, potionEntityType);
             thrown.setItem(singlePotion);
             thrown.setVelocity(scatterVel);
             removeItem(victim, slot);
@@ -180,7 +203,7 @@ public final class SpillNDrop extends JavaPlugin implements Listener, CommandExe
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, @NonNull Command command, @NonNull String label, String @NonNull [] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("spillndrop.admin")) {
             sender.sendMessage(getMsg("prefix") + getMsg("no-permission"));
             return true;
@@ -290,7 +313,7 @@ public final class SpillNDrop extends JavaPlugin implements Listener, CommandExe
     }
 
     @Override
-    public List<String> onTabComplete(@NonNull CommandSender sender, @NonNull Command command, @NonNull String alias, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();
         if (args.length == 1) {
             list.add("help");

@@ -1,7 +1,7 @@
 name: SpillNDrop
-version: '0.1'
+version: '0.2+1.19-26.1.2'
 main: dev.gdlev.spillNDrop.SpillNDrop
-api-version: '1.21'
+api-version: '1.19'
 authors: [ GDLev ]
 description: Spill your inventory on impact! Items scatter when you fall, get rammed by a goat, or caught in a sonic boom. Configurable drop chances, water spills, potion smashing and more.
 

@@ -4,6 +4,8 @@
 
 SpillNDrop is a lightweight Minecraft plugin that makes taking damage feel more impactful. When a player falls, gets rammed by a goat, or gets hit by a Warden's sonic boom, there's a chance their items spill out of their inventory — or just their held item, if you prefer a subtler approach.
 
+Supports Spigot, Paper, and compatible server software from Minecraft `1.19` through `26.1.2`.
+
 ---
 
 ## Features
@@ -16,6 +18,7 @@ SpillNDrop is a lightweight Minecraft plugin that makes taking damage feel more 
 - **Per-cause control** — configure fall damage, sonic boom, and goat attacks independently
 - **Scatter physics** — dropped items fly outward with configurable force
 - **Pickup delay** — dropped items can't be immediately picked back up
+- **World selection** — choose the worlds in which the plugin is active
 - **Multi-language support** — ships with English and Polish, easily extendable
 
 ---
@@ -58,6 +61,12 @@ All commands require the `spillndrop.admin` permission.
 ```yaml
 language: en  # Available: en, pl
 
+enabled-worlds:
+  - world
+  - world_nether
+  - world_the_end
+# Use '*' as the only entry to enable the plugin in all worlds
+
 multipliers:
   FALL: 6.0
   SONIC_BOOM: 10.0
@@ -92,9 +101,12 @@ Language files live in the `langs/` folder inside the plugin directory. To add a
 
 Download the mod from [Modrinth](h[ttps://modrinth.com/mod/better-mc-screenshots](https://modrinth.com/plugin/spill-n-drop).
 
+The plugin is compiled for Java 17. Your server may require a newer Java version depending on its Minecraft version.
+
 ## Development
 
 To build the project using Gradle, run the following commands in the project root, depending on your Minecraft version:
 
 ```bash
-./gradlew build            # All versions
+./gradlew build                              # Build against the minimum supported API (1.19)
+./gradlew build -PspigotApiVersion=26.1.2    # Verify against the latest supported API
