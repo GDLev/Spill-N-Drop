@@ -1,3 +1,7 @@
+![Modrinth Downloads](https://img.shields.io/modrinth/dt/spill-n-drop?style=flat&labelColor=%232b303b&color=%23389949)
+![Supports Minecraft 1.19 – 26.1.2](https://img.shields.io/badge/minecraft-1.19_--_26.1.2-d25947?labelColor=2b303b)
+
+
 # Spill N' Drop
 
 **Drop your items when you get hurt — literally.**
